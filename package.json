@@ -1,0 +1,19 @@
+{
+  "name": "devtinder",
+  "version": "1.0.0",
+  "description": "DevTinder Project",
+  "keywords": [
+    "DevTinder"
+  ],
+  "license": "ISC",
+  "author": "Amrin",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/APp.js",
+    "dev": "nodemon src/APp.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
