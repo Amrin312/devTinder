@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
+// const {DB_PASSWORD} = require('../');
 
 const connectDb = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://amrin:@cluster0.yr19snl.mongodb.net/devtinder?retryWrites=true&w=majority"
-    );
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log("Database connected successfully");
   } catch (err) {
