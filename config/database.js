@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const connectDb = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://amrin:mXkqdIT6hITqFIyM@cluster0.yr19snl.mongodb.net/devtinder?retryWrites=true&w=majority"
+      "mongodb+srv://amrin:@cluster0.yr19snl.mongodb.net/devtinder?retryWrites=true&w=majority"
     );
 
     console.log("Database connected successfully");
