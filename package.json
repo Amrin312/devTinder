@@ -10,10 +10,12 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "node src/APp.js",
-    "dev": "nodemon src/APp.js"
+    "start": "node src/App.js",
+    "dev": "nodemon src/App.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongodb": "^7.0.0",
+    "mongoose": "^7.6.3"
   }
 }
