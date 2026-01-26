@@ -1,23 +1,22 @@
 const express = require('express');
 require('dotenv').config();
+const User = require('../model/User');
 
 const connectDB = require('../config/database');
 
 const app = express();
 
+app.use(express.json());
+
 app.post('/addUser', async (req, res)=>{
     try{
-        const user = new User({
-            firstName: 'Amrin',
-            lastName: 'Fathima',
-            age: 24,
-            email: 'amrin@gmail.com'
-        });
+        const user = new User(req.body);
 
         await user.save();
         res.send('User Added!');
+         
     }catch(err){
-        res.send('Error adding user' , err.message);
+        res.status(500).send('Error adding user: ' + err.message);
     }
 });
 
