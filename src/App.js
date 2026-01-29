@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const User = require('../model/User');
+const bcrypt = require('bcrypt');
 
 const connectDB = require('../config/database');
 
@@ -10,19 +11,21 @@ app.use(express.json());
 
 app.post('/addUser', async (req, res)=>{
     try{
+        const {firstName, lastName, age, email, gender} = req.body;
         const data = req.body;
 
-        const allowed_field = ['firstName', 'lastName', 'age', 'email', 'gender'];
-
-        const check_allowed_fields = Object.keys(data).every(k => {
-            allowed_field.includes(k);
-        });
+        const allowed_field = ['firstName', 'lastName', 'age', 'email', 'gender', 'password'];
+        
+        const check_allowed_fields = Object.keys(data).every(k => allowed_field.includes(k));
 
         if(!check_allowed_fields) throw new Error("You cannot add extra fields!");
 
-        const user = new User(data);
+        const hashPassword = await bcrypt.hash(req.body.password, 10);
+
+        const user = new User({firstName, lastName, age, email, gender, password: hashPassword});
 
         await user.save();
+
         res.send('User Added!');
          
     }catch(err){
@@ -31,6 +34,7 @@ app.post('/addUser', async (req, res)=>{
 });
 
 app.patch('/updateUser/:userId', async (req, res) => {
+
     try{
         const userId = req.params.userId;
         const data = req.body;
@@ -52,12 +56,13 @@ app.patch('/updateUser/:userId', async (req, res) => {
     }
 });
 
+
 app.get('/', (req, res) => {
     res.send('Hello world!');
 })
 
  app.listen(7777, () => {
- console.log(`Server is successfully running on 7777`);
+    console.log(`Server is successfully running on 7777`);
  });
 
 
