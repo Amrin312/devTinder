@@ -2,14 +2,17 @@ const express = require('express');
 require('dotenv').config();
 const User = require('../model/User');
 const bcrypt = require('bcrypt');
-
 const connectDB = require('../config/database');
-
+const jwt = require('jsonwebtoken');
+const cookie = require('js-cookie');
+const cookieParser = require('cookie-parser');
+const authCheck = require('../middlewares/Auth')
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
-app.post('/addUser', async (req, res)=>{
+app.post('/signup', async (req, res)=>{
     try{
         const {firstName, lastName, age, email, gender} = req.body;
         const data = req.body;
@@ -33,7 +36,7 @@ app.post('/addUser', async (req, res)=>{
     }
 });
 
-app.patch('/updateUser/:userId', async (req, res) => {
+app.patch('/updateUser/:userId', authCheck, async (req, res) => {
 
     try{
         const userId = req.params.userId;
@@ -53,6 +56,38 @@ app.patch('/updateUser/:userId', async (req, res) => {
 
     }catch(err){
         res.send('Update failed!' + err.message)
+    }
+});
+
+//login
+app.post('/login', async (req, res) => {
+    try{
+        const { email, password} = req.body;
+        const user = await User.findOne({email: email});
+    
+        if(!user){ throw new Error('User Not foiund!')}
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        
+        if(!validPassword){ throw new Error('Invalid credentials!')}
+
+        const token = await jwt.sign({_id: user._id}, "devTender@$1234");
+
+        res.cookie('token', token);
+        res.send('Login successfull!');
+
+    }catch(err){
+        res.send('Login Failed!' + err.message)
+    }
+});
+
+app.get('/profile', authCheck, async (req, res) => {
+    try{
+        const user = req.user;
+        
+        res.send(user);
+    }catch(err){
+        res.send('Error !' + err.message)
     }
 });
 
