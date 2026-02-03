@@ -16,7 +16,7 @@ authRouter.post('/signup', async (req, res)=>{
 
         if(!check_allowed_fields) throw new Error("You cannot add extra fields!");
 
-        const hashPassword = await user.hashedPassword(req.body.password);
+        const hashPassword = await bcrypt.hash(data.password, 10);
 
         const user = new User({firstName, lastName, age, email, gender, password: hashPassword});
 
@@ -51,7 +51,7 @@ authRouter.post('/login', async (req, res) => {
 });
 
 authRouter.post('/logout', async (req, res) => {
-    res.cookie('token', null, {expires: '0d'});
+    res.cookie('token', null, {expires: new Date(0)});
     res.send('Logged out successfully!')
 });
 
