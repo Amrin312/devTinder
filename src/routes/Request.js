@@ -40,5 +40,9 @@ requestRouter.post('/request/send/:status/:userId', authCheck, async (req, res) 
     }
 });
 
+requestRouter.post('/request/review/:status/:requestId', authCheck, (req, res) => {
+    
+});
+
 
 module.exports = requestRouter;
