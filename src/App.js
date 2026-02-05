@@ -5,12 +5,14 @@ const cookieParser = require('cookie-parser');
 const authRouter= require('./routes/Auth');
 const profileRouter= require('./routes/Profile');
 const requestRouter= require('./routes/Request');
+const userRouter= require('./routes/User');
+
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(authRouter, profileRouter, requestRouter);
+app.use(authRouter, profileRouter, requestRouter, userRouter);
 
  app.listen(7777, () => {
     console.log(`Server is successfully running on 7777`);

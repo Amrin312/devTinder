@@ -11,6 +11,12 @@ requestRouter.post('/request/send/:status/:userId', authCheck, async (req, res) 
         const toId = req.params.userId;
         const status = req.params.status;
 
+        const allowedStatus = ['interested', 'ignored'];
+
+        if(!allowedStatus.includes(status)){
+            res.status(403).send('Status not allowed!');
+        }
+
         const checkExisitingConnReq = await connectionRequestModel.findOne({
             $or:[
                 { fromId, toId },
@@ -40,9 +46,36 @@ requestRouter.post('/request/send/:status/:userId', authCheck, async (req, res) 
     }
 });
 
-requestRouter.post('/request/review/:status/:requestId', authCheck, (req, res) => {
-    
+requestRouter.post('/request/review/:status/:requestId',  authCheck, async (req, res) => {
+    try{
+        const loggedInUser = req.user;
+        const { status, requestId } = req.params;
+        const allowedStatus = ['accepted', 'rejected'];
+
+        if(!allowedStatus.includes(status)){
+            res.status(403).send('Status not allowed!');
+        }
+
+        const connectionRequest = await connectionRequestModel.findOne({
+            _id: requestId,
+            toId: loggedInUser._id,
+            status: 'interested'
+        });
+
+        if(!connectionRequest){            
+            res.status(404).send('Request not found!');
+        }
+
+        connectionRequest.status = status;
+
+        const data = await connectionRequest.save();
+
+        return res.status(200).json({message: 'Connection request ' + status, data});
+    }catch(err){
+        res.status(500).send('Error: ' + err.message)
+    }
 });
+
 
 
 module.exports = requestRouter;
