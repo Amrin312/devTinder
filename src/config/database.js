@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// const {DB_PASSWORD} = require('../');
 
 const connectDb = async () => {
   try {

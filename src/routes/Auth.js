@@ -32,6 +32,7 @@ authRouter.post('/signup', async (req, res)=>{
 authRouter.post('/login', async (req, res) => {
     try{
         const { email, password} = req.body;
+        
         const user = await User.findOne({email: email});
     
         if(!user){ throw new Error('User Not found!')}

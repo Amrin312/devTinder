@@ -1,6 +1,7 @@
 const express = require('express');
 const authCheck = require('../middlewares/Auth');
 const ConnectionRequestModel = require('../model/ConnectionRequestModel');
+const User = require('../model/User');
 
 const userRouter = express.Router();
 
@@ -35,13 +36,37 @@ userRouter.get('/user/connections', authCheck, async (req, res) => {
 
 userRouter.get('/user/feed', authCheck, async (req, res) => {
     // should not present in connection request (fromId, toId)
-    // 
-    // try{
+    try{
+        const loggedInUser = req.user;
 
-    // }catch(err){
-    //     res.status(400).
-    // }
+        let page = parseInt(req.query.skip) || 0;
+        let limit = parseInt(req.query.limit) || 10;
+        limit = (page -1) * limit;
 
+        const connectionRequest = await ConnectionRequestModel.find({
+            $or: [
+                {fromId: loggedInUser._id }, { toId: loggedInUser._id } 
+            ]
+        }).select('fromId toId');
+
+        const hideUsers = new Set();
+
+        connectionRequest.forEach(row => {
+            hideUsers.add(row.fromId);
+            hideUsers.add(row.toId);
+        });
+
+        const users = await User.find({
+            $and: [
+                { _id: { $nin: Array.from(hideUsers) } },
+                { _id: { $ne: loggedInUser._id } }
+            ],
+        }).select(USER_SAFE_DATA).skip(page).limit(limit);
+
+        res.send(users)
+    }catch(err){
+        res.status(400).send('Error ' + err.message);
+    }
 });
 
 module.exports = userRouter;
