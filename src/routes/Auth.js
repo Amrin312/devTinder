@@ -7,10 +7,11 @@ const bcrypt = require('bcrypt');
 
 authRouter.post('/signup', async (req, res)=>{
     try{
-        const {firstName, lastName, age, email, gender} = req.body;
+        const {firstName, lastName, age, email, gender, skills, photoUrl, about} = req.body;
+        
         const data = req.body;
 
-        const allowed_field = ['firstName', 'lastName', 'age', 'email', 'gender', 'password'];
+        const allowed_field = ['firstName', 'lastName', 'age', 'email', 'gender', 'password', 'skills', 'photoUrl', 'about'];
         
         const check_allowed_fields = Object.keys(data).every(k => allowed_field.includes(k));
 
@@ -18,7 +19,7 @@ authRouter.post('/signup', async (req, res)=>{
 
         const hashPassword = await bcrypt.hash(data.password, 10);
 
-        const user = new User({firstName, lastName, age, email, gender, password: hashPassword});
+        const user = new User({firstName, lastName, age, email, gender, password: hashPassword, skills, photoUrl, about});
 
         await user.save();
 

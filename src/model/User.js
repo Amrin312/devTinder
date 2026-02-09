@@ -37,6 +37,15 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
+    },
+    skills: {
+      type: Array,
+    },
+    photoUrl: {
+      type: String,
+    }, 
+    about: {
+      type: String
     }
   },
  
