@@ -9,7 +9,7 @@ const authCheck = async (req, res, next) => {
 
         // console.log(token);
 
-        if(!token) throw new Error('Please login!');
+        if(!token) return res.status(401).send('Please Login!');
 
         const decodeObj = jwt.verify(token, "devTender@$1234");
 

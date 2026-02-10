@@ -4,10 +4,9 @@ const User = require('../model/User');
 const { validateEditProfile } = require('../utils/validation');
 const profileRouter = express.Router();
 
-profileRouter.get('/profile', authCheck, async (req, res) => {
+profileRouter.get('/profile/view', authCheck, async (req, res) => {
     try{
         const user = req.user;
-        
         res.send(user);
     }catch(err){
         res.send('Error !' + err.message)
