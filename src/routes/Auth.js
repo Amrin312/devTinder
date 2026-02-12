@@ -36,11 +36,15 @@ authRouter.post('/login', async (req, res) => {
         
         const user = await User.findOne({email: email});
     
-        if(!user){ throw new Error('User Not found!')}
+        if(!user){
+            return res.status(404).json({ message: "User not found" });
+        }
 
         const validPassword = await user.checkPassword(password);
         
-        if(!validPassword){ throw new Error('Invalid credentials!')}
+        if(!validPassword) {
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
 
         const token = await user.getJWT();
 
@@ -48,7 +52,7 @@ authRouter.post('/login', async (req, res) => {
         res.send(user);
 
     }catch(err){
-        res.send('Login Failed!' + err.message)
+        res.status(500).json({ message: "Server error" })
     }
 });
 
