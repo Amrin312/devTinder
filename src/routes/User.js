@@ -5,7 +5,7 @@ const User = require('../model/User');
 
 const userRouter = express.Router();
 
-const USER_SAFE_DATA = "firstName lastName age email gender";
+const USER_SAFE_DATA = "firstName lastName age bio gender";
 
 userRouter.get('/user/requests', authCheck, async (req, res) => {
     const user = req.user;
@@ -24,8 +24,10 @@ userRouter.get('/user/connections', authCheck, async (req, res) => {
         ],
     }).populate('fromId', USER_SAFE_DATA).populate('toId', USER_SAFE_DATA);
 
+
+
     const data = connectionRequests.map(row => {
-        if(row._id.toString() === user._id.toString()){
+        if(row.fromId._id.toString() === user._id.toString()){
             return row.toId;
         }
         return row.fromId;

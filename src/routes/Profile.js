@@ -13,7 +13,7 @@ profileRouter.get('/profile/view', authCheck, async (req, res) => {
     }
 });
 
-profileRouter.patch('profile/edit/:userId', authCheck, async (req, res) => {
+profileRouter.patch('/profile/edit/:userId', authCheck, async (req, res) => {
 
     try{
         const userId = req.params.userId;

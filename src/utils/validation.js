@@ -1,7 +1,9 @@
 const validateEditProfile = (data) => {
-    const allowed_field = ['firstName', 'lastName', 'age', 'email', 'gender'];
+    const allowed_field = ['firstName', 'lastName', 'age', 'gender', 'skills', 'bio', 'about', 'photoUrl'];
 
     const check_allowed_fields = Object.keys(data).every(k => {
+        console.log(k);
+        
         return allowed_field.includes(k);
     });
 
