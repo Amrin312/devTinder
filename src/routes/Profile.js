@@ -3,6 +3,8 @@ const authCheck = require('../middlewares/Auth')
 const User = require('../model/User');
 const { validateEditProfile } = require('../utils/validation');
 const profileRouter = express.Router();
+const upload = require('../config/upload');
+const userRouter = require('./User');
 
 profileRouter.get('/profile/view', authCheck, async (req, res) => {
     try{
@@ -60,6 +62,23 @@ profileRouter.patch('/profile/password', authCheck, async (req, res) => {
     }catch(err){
         res.status(500).send("Error " + err.message);
     }
+});
+
+profileRouter.post('/upload-profile', authCheck, upload.single('profile'), async(req, res) => {
+   try{
+
+        const fileUrl = `http://localhost:7777/uploads/${req.file.filename}`;
+        // const user = req.user;
+        const user = await User.findByIdAndUpdate(req.user._id, 
+           { photoUrl: fileUrl },
+           { new: true}
+        );
+        res.status(200).json(user);
+
+   }catch(err){
+        res.status(500).send("Error " + err.message);
+   }
+
 });
 
 

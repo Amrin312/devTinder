@@ -17,8 +17,16 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(authRouter, profileRouter, requestRouter, userRouter);
+// app.use(authRouter, profileRouter, requestRouter, userRouter);
 
- app.listen(7777, () => {
+app.use('/api', authRouter);
+app.use('/api', profileRouter);
+app.use('/api', requestRouter);
+app.use('/api', userRouter);
+
+app.use('/uploads', require("express").static("uploads"));
+
+
+app.listen(7777, () => {
     console.log(`Server is successfully running on 7777`);
  });
