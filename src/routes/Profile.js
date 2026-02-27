@@ -67,7 +67,7 @@ profileRouter.patch('/profile/password', authCheck, async (req, res) => {
 profileRouter.post('/upload-profile', authCheck, upload.single('profile'), async(req, res) => {
    try{
 
-        const fileUrl = `http://localhost:7777/uploads/${req.file.filename}`;
+        const fileUrl = `/uploads/${req.file.filename}`;
         // const user = req.user;
         const user = await User.findByIdAndUpdate(req.user._id, 
            { photoUrl: fileUrl },
