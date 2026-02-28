@@ -7,6 +7,7 @@ const profileRouter= require('./routes/Profile');
 const requestRouter= require('./routes/Request');
 const userRouter= require('./routes/User');
 const cors = require('cors');
+const path = require("path");
 
 const app = express();
 
@@ -24,7 +25,12 @@ app.use('/api', profileRouter);
 app.use('/api', requestRouter);
 app.use('/api', userRouter);
 
-app.use('/uploads', require("express").static("uploads"));
+// app.use('/uploads', require("express").static("uploads"));
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
 
 
 app.listen(7777, () => {
